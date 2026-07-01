@@ -34,6 +34,7 @@
   .nav-logo {
     font-size: 1.05rem; font-weight: 800; color: var(--white);
     letter-spacing: 0.05em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; display: inline-block;
   }
   .nav-logo span { color: var(--red); }
   .nav-links { display: flex; gap: 30px; }
@@ -368,11 +369,11 @@
 <body>
 
 <nav>
-  <div class="nav-logo">Central <span>Heating & Air</span></div>
+  <a href="#home" class="nav-logo" data-page="home" onclick="showPage('home',this);return false;" aria-label="Central Heating and Air home">Central <span>Heating & Air</span></a>
   <div class="nav-links">
-    <a href="#" class="active" data-page="home" onclick="showPage('home',this);return false;">Home</a>
-    <a href="#" data-page="about" onclick="showPage('about',this);return false;">About</a>
-    <a href="#" data-page="contact" onclick="showPage('contact',this);return false;">Contact</a>
+    <a href="#home" class="active" data-page="home" onclick="showPage('home',this);return false;">Home</a>
+    <a href="#about" data-page="about" onclick="showPage('about',this);return false;">About</a>
+    <a href="#contact" data-page="contact" onclick="showPage('contact',this);return false;">Contact</a>
   </div>
   <a href="tel:2525276676" class="nav-phone">(252) 527-6676</a>
 </nav>
@@ -387,8 +388,8 @@
       <h1>Commercial HVAC &amp; <em>Mechanical Contracting</em> Since 1977</h1>
       <p>Serving Eastern North Carolina with commercial, industrial, and residential HVAC services backed by licensed technicians, in-house fabrication, and nearly 50 years of experience.</p>
       <div class="hero-actions">
-        <a href="#" class="btn-primary" onclick="showPage('contact',null);return false;">Contact Our Office</a>
-        <a href="#" class="btn-outline" onclick="showPage('about',null);return false;">Our Story</a>
+        <a href="#contact" class="btn-primary" onclick="showPage('contact',null);return false;">Contact Our Office</a>
+        <a href="#about" class="btn-outline" onclick="showPage('about',null);return false;">About Central HAC</a>
       </div>
     </div>
   </section>
@@ -455,7 +456,7 @@
     <p>Call or email our office to discuss bid invitations, project inquiries, service needs, or general questions.</p>
     <div class="cta-actions">
       <a href="tel:2525276676" class="btn-white">(252) 527-6676</a>
-      <a href="#" class="btn-outline" onclick="showPage('contact',null);return false;">Contact Our Office</a>
+      <a href="#contact" class="btn-outline" onclick="showPage('contact',null);return false;">Contact Our Office</a>
     </div>
   </div>
 </div>
@@ -490,7 +491,7 @@
           </div>
         </div>
         <div class="about-text">
-          <div class="section-label">Our Story</div>
+          <div class="section-label">Company Background</div>
           <div class="section-title">Built in Kinston. Trusted Across Eastern NC.</div>
           <p style="color:var(--muted); line-height:1.78; margin-bottom:16px;">Central Heating and Air Conditioning of Kinston, Inc. has been a full-service HVAC and mechanical contractor since July 1977. What started as a local service company has grown into one of Eastern North Carolina's most experienced mechanical contracting firms.</p>
           <p style="color:var(--muted); line-height:1.78; margin-bottom:20px;">We specialize in commercial, industrial, and residential HVAC — from small-scale service calls to major mechanical construction projects. Our in-house automated sheet metal fabrication shop gives us a competitive edge that most contractors in the region can't match.</p>
@@ -580,16 +581,42 @@
 
 <script>
   // ── Page navigation ──────────────────────────────────────────
-  function showPage(id, linkEl) {
+  function showPage(id, linkEl, updateHistory = true) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const page = document.getElementById('page-' + id);
     if (!page) return;
     page.classList.add('active');
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    const activeLink = linkEl || document.querySelector(`.nav-links a[data-page="${id}"]`);
+
+    document.querySelectorAll('.nav-links a, .nav-logo').forEach(a => a.classList.remove('active'));
+    const activeLink = linkEl && linkEl.matches('.nav-links a')
+      ? linkEl
+      : document.querySelector(`.nav-links a[data-page="${id}"]`);
     if (activeLink) activeLink.classList.add('active');
+
+    if (updateHistory) {
+      const baseUrl = window.location.pathname + window.location.search;
+      const newUrl = id === 'home' ? baseUrl : baseUrl + '#' + id;
+      const currentUrl = baseUrl + window.location.hash;
+      if (currentUrl !== newUrl) {
+        history.pushState({ page: id }, '', newUrl);
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function getPageFromUrl() {
+    const id = window.location.hash.replace('#', '') || 'home';
+    return document.getElementById('page-' + id) ? id : 'home';
+  }
+
+  window.addEventListener('popstate', () => {
+    showPage(getPageFromUrl(), null, false);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    showPage(getPageFromUrl(), null, false);
+  });
 
   // ── Hero image slider ─────────────────────────────────────────
   // Naming convention: images/hero1.jpg, hero2.jpg, hero3.jpg ...
