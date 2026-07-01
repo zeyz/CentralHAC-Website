@@ -313,21 +313,6 @@
   footer a { color: rgba(255,255,255,0.55); text-decoration: none; }
   footer a:hover { color: var(--white); }
 
-  /* PAGE TABS */
-  .page-tabs {
-    display: flex; gap: 0;
-    background: var(--steel); border-bottom: 3px solid var(--red);
-    padding: 0 40px; overflow-x: auto;
-    position: sticky; top: 66px; z-index: 50;
-  }
-  .tab {
-    padding: 13px 22px; font-size: 0.8rem; font-weight: 700;
-    color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.08em;
-    cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -3px;
-    transition: color 0.2s, border-color 0.2s; white-space: nowrap;
-  }
-  .tab.active, .tab:hover { color: var(--white); border-color: var(--red); }
-
   /* PAGE SECTIONS */
   .page { display: none; }
   .page.active { display: block; }
@@ -344,7 +329,6 @@
     .stats-bar { flex-direction: column; }
     .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
     .form-row { grid-template-columns: 1fr; }
-    .page-tabs { padding: 0 20px; }
   }
 
   /* CTA STRIP */
@@ -464,7 +448,6 @@
 <!-- ABOUT PAGE -->
 <div class="page" id="page-about">
   <div style="height:66px;"></div>
-  <div class="page-tabs"><span class="tab active">About Central HAC</span></div>
   <section>
     <div class="container">
       <div class="about-grid">
@@ -511,7 +494,6 @@
 <!-- CONTACT PAGE -->
 <div class="page" id="page-contact">
   <div style="height:66px;"></div>
-  <div class="page-tabs"><span class="tab active">Contact Us</span></div>
   <section class="contact">
     <div class="container">
       <div class="section-label">Get In Touch</div>
